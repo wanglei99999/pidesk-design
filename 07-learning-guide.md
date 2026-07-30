@@ -25,7 +25,8 @@ PiDesk 当前分析基于 Pi `0.80.10` 和提交 `eb8dd587e780b5393f53635002004c
 
 | 场景 | Pi 候选内容 | Agent 学习内容 |
 |---|---|---|
-| 文件批量重命名 | SDK、RPC、AgentSession、Tool | 工具选择、结构化计划、参数校验、写入确认 |
+| 运行闭环验证（文件重命名实验） | SDK、RPC、AgentSession、Tool | 工具选择、结构化计划、参数校验、写入确认 |
+| 工作区文档处理 | Session、ResourceLoader、Tool 输出 | 任务上下文、产物、多轮修改、状态边界 |
 | 会议材料整理 | Skill、ResourceLoader、Session | 长文本、信息提取、结构化结果 |
 | 文档与演示文稿 | Extension、Tool 输出 | 文件生成、多轮修改、产物校验 |
 | 表格分析 | 自定义 Tool、命令执行 | 计算与推理分工、结果证据 |

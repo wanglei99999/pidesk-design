@@ -6,11 +6,13 @@
 
 | 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-001](tasks/TASK-001-file-organization.md) | 完成文本文件批量重命名 | 待开始 | `task/001-file-organization` | [根据内容批量重命名文件](scenarios/001-file-organization.md) | 列出 SDK 与 RPC 最小实验需要回答的问题 |
+| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 待开始 | `task/001-file-organization` | [根据内容批量重命名文件](scenarios/001-file-organization.md) | 列出 SDK 与 RPC 最小实验需要回答的问题 |
 
 ## 后续任务
 
 后续场景按照用户价值、复杂度、复用价值和学习价值排序。每个任务都需要独立的范围和验收标准。
+
+TASK-001 完成后，优先为“工作区中的文档资料处理与生成”创建场景和 TASK，作为第一个用户可感知的产品纵向切片。具体文档类型和验收标准确认前不提前分配任务编号。
 
 ## 维护规则
 

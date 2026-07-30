@@ -2,7 +2,7 @@
 
 ## 状态
 
-已确认作为 PiDesk 的第一个实现与学习场景。对应任务：[TASK-001](../tasks/TASK-001-file-organization.md)。
+已确认作为 PiDesk 的第一个运行闭环与学习实验。它使用真实存在的文件处理问题验证 Pi 接入、Tool、安全写入和记录，但不代表 PiDesk 的首个完整产品功能。对应任务：[TASK-001](../tasks/TASK-001-file-organization.md)。
 
 ## 用户问题
 
