@@ -1,65 +1,89 @@
-# PiDesk 设计方案
+# PiDesk
 
-PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的办公 Agent 方案。本仓库用于记录业务场景、技术设计、实施安排、开发规范和学习过程，目前不包含功能代码。
+PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办公 Agent 项目。它从具体、可验证的办公任务开始，逐步形成可复用的任务运行、文件处理、工具调用、确认和结果检查能力。
 
-WorkBuddy 是本方案参考的代表性办公 Agent。我们只整理其公开场景，不研究或复制其内部实现。本项目与 WorkBuddy、腾讯及 Pi 官方没有隶属或合作关系。
+市面办公 Agent 产品只作为场景来源。PiDesk 研究它们公开解决了什么问题、接收什么输入、交付什么结果，再独立设计自己的产品和实现，不照抄产品表现，也不猜测其内部实现。
 
-## 这套文档解决什么问题
+## 项目目标
 
-我们希望参考 WorkBuddy 已经公开的办公场景，结合公司的真实工作，用 Pi 开发自己的办公 Agent。
+1. 做出可以实际使用并持续扩展的办公 Agent；
+2. 通过真实场景学习 Pi、Agent 产品设计和工程实现；
+3. 将产品判断、架构决策、实现和验证整理成可公开展示的项目。
 
-这件事有三个目标，顺序不能颠倒：
-
-1. 解决公司的实际效率问题。
-2. 在开发过程中学习 Pi 和 Agent 产品。
-3. 把可以公开的知识整理成个人作品和求职材料。
-
-WorkBuddy 是场景参考。我们研究它解决了哪些工作、用户提供什么、最后得到什么，不研究或猜测它的内部代码。技术方案由我们根据 Pi 和公司情况独立设计。
+更具体的范围和优先顺序见 [产品决定](product-decisions.md)，长期设计原则见 [产品原则](01-product-principles.md)。
 
 ## 当前阶段
 
-当前只写方案，不实现功能代码。
+项目基础文档和首批场景已经整理完成，代码结构尚未创建。当前任务是 [TASK-001：完成文本文件批量重命名](tasks/TASK-001-file-organization.md)，先用根层 `.txt`、`.md` 模拟文件完成“分析—预览—确认—执行—记录”的最小闭环，同时用代码比较 Pi SDK 与 RPC 的接入边界。
 
-开始开发前还需要补充公司信息：
+在 TASK-001 确定程序入口、依赖和检查命令后，再按实际需要创建 `src/`、测试、包配置和 CI，不提前保留空目录。
 
-- 预期使用部门和岗位；
-- 日常重复工作清单；
-- 已有内部软件及技术栈；
-- 需要连接的 OA、ERP、CRM、数据库、邮箱、IM 或知识库；
-- 数据安全和部署要求；
-- 第一批试用人员和验收方式。
+## 仓库结构
 
-这些信息缺失时，文档中的场景优先级只能作为建议，不能代替公司决策。
+```text
+pidesk-design/
+├── .github/
+│   └── pull_request_template.md               # PR 验收、记录和公开仓库检查
+├── adr/
+│   ├── README.md                              # ADR 使用规则和决策索引
+│   ├── TEMPLATE.md                            # 新架构决定模板
+│   ├── 0001-use-pi-as-agent-runtime.md        # 采用 Pi 作为 Agent 运行基础
+│   └── 0002-separate-public-core-and-private-adapters.md
+│                                                # 公开产品与私有适配的边界
+├── research/
+│   └── products/
+│       └── workbuddy.md                       # WorkBuddy 公开事实与 PiDesk 分析
+├── scenarios/
+│   ├── TEMPLATE.md                            # 场景说明模板
+│   └── 001-file-organization.md               # 文本文件批量重命名场景
+├── tasks/
+│   ├── TEMPLATE.md                            # 开发任务模板
+│   └── TASK-001-file-organization.md          # 当前开发任务及进度
+├── templates/
+│   └── company-adaptation/
+│       └── task-inventory.md                  # 私有环境复用时的空白调研模板
+├── .gitattributes                             # 文本和换行符规则
+├── .gitignore                                 # 凭据、依赖、产物和本机文件排除规则
+├── AGENTS.md                                  # AI Agent 与开发者的仓库规则
+├── CHANGELOG.md                               # 用户可感知的版本变化
+├── DEVELOPMENT.md                             # 分支、多电脑同步和任务交接流程
+├── LICENSE                                    # MIT License
+├── README.md                                  # 项目说明和入口
+├── TASKS.md                                   # 任务总表、状态和下一步
+├── product-decisions.md                       # 产品目标、范围和优先顺序
+├── 01-product-principles.md                   # 产品与实现原则
+├── 02-market-scenes.md                        # 跨产品办公场景库
+├── 03-scene-analysis.md                       # 场景选择与分析方法
+├── 04-pi-integration-plan.md                  # Pi 能力、接入候选和验证计划
+├── 05-product-roadmap.md                      # 产品能力演进顺序
+├── 06-development-rules.md                    # 安全基线和待验证实践
+├── 07-learning-guide.md                       # Pi 与 Agent 学习方法
+└── sources.md                                 # 可追溯的市面产品和 Pi 资料
+```
 
-## 文档目录
+## 开发方式
 
-| 文档 | 内容 |
-|---|---|
-| [01-project-positioning.md](01-project-positioning.md) | 项目目标、范围、工作方法 |
-| [02-workbuddy-scenes.md](02-workbuddy-scenes.md) | WorkBuddy 已公开的办公场景 |
-| [03-scene-analysis.md](03-scene-analysis.md) | 场景筛选方法和分析模板 |
-| [04-pi-technical-plan.md](04-pi-technical-plan.md) | Pi 可复用部分、需要补充的产品功能 |
-| [05-delivery-plan.md](05-delivery-plan.md) | 实施顺序、阶段产物和完成条件 |
-| [06-development-rules.md](06-development-rules.md) | Tool、Skill、连接器、任务、权限等规范草案 |
-| [07-learning-record.md](07-learning-record.md) | 如何在开发场景时学习 Pi 和 Agent |
-| [decisions.md](decisions.md) | 已确认决定和待确认事项 |
-| [company-task-inventory.md](company-task-inventory.md) | 公司任务收集表 |
-| [scenarios/001-file-organization.md](scenarios/001-file-organization.md) | 文件整理场景的完整分析示例 |
-| [sources.md](sources.md) | WorkBuddy 官方资料和 Pi 本地资料 |
+增加一个场景时：
 
-## 使用方式
+1. 从实际工作或 [市场场景库](02-market-scenes.md) 中选择具体问题；
+2. 用 [场景模板](scenarios/TEMPLATE.md) 写清用户、输入、输出、风险和验收；
+3. 创建任务文件，收窄本次范围并记录唯一下一步；
+4. 把 Pi 能力当作候选，用最小代码实验确认接入和边界；
+5. 实现完整闭环，分开验证系统正确性和模型质量；
+6. 记录实际结论，必要时更新 ADR、开发规则和 `[Unreleased]`。
 
-以后增加一个场景时，按以下顺序处理：
+规范不是一次写死的。安全基线直接执行，其他做法只有经过实际任务重复验证后才升级为长期规则。
 
-1. 从公司真实工作中写清问题和人工步骤。
-2. 参考 WorkBuddy 同类场景，但不照抄产品表现。
-3. 明确输入、输出、风险和验收方式。
-4. 判断 Pi 可以直接使用什么。
-5. 列出需要新增的 Tool、Skill、连接器和产品功能。
-6. 方案确认后再开发。
-7. 开发完成后补测试结果、Pi 学习记录和新增规则。
+跨电脑开发按照 [开发流程](DEVELOPMENT.md) 更新任务文件并推送当前任务分支，任何电脑都以 GitHub 上的最新提交为同步来源。
 
-规范文档不是一次写死的。只有实际开发中重复出现的问题，才适合沉淀成正式规则。
+## 常用入口
+
+- [当前任务](TASKS.md)
+- [开发流程](DEVELOPMENT.md)
+- [产品决定](product-decisions.md)
+- [架构决定](adr/README.md)
+- [市场场景](02-market-scenes.md)
+- [Pi 接入计划](04-pi-integration-plan.md)
 
 ## 许可证
 
