@@ -16,9 +16,9 @@ PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办�
 
 ## 当前阶段
 
-项目基础文档和首批场景已经整理完成，代码结构尚未创建。当前任务是 [TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md)。它以根层 `.txt`、`.md` 文件批量重命名作为受控实验，验证 Pi 接入、Tool 调用、预览、确认、安全写入和执行记录，不把该实验当作 PiDesk 的首个完整产品功能。
+项目基础文档、首批场景和最小 TypeScript 代码结构已经建立。当前任务是 [TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md)。它以根层 `.txt`、`.md` 文件批量重命名作为受控实验，验证 Pi 接入、Tool 调用、预览、确认、安全写入和执行记录，不把该实验当作 PiDesk 的首个完整产品功能。
 
-TASK-001 完成后，项目进入“工作区中的文档资料处理与生成”纵向切片，验证用户可感知的任务、上下文、产物和继续修改体验。在 TASK-001 确定程序入口、依赖和检查命令前，不提前创建空的代码目录。
+TASK-001 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播。下一步是把“`pi-coding-agent` SDK + PiDesk 自有适配层”的接入结论写入 ADR，再实现具体业务闭环。TASK-001 完成后，项目进入“工作区中的文档资料处理与生成”纵向切片。
 
 ## 仓库结构
 
@@ -41,6 +41,8 @@ pidesk-design/
 ├── tasks/
 │   ├── TEMPLATE.md                            # 开发任务模板
 │   └── TASK-001-file-organization.md          # 当前开发任务及进度
+├── test/
+│   └── pi-coding-agent-sdk.test.ts            # SDK 接入边界与取消实验
 ├── templates/
 │   └── company-adaptation/
 │       └── task-inventory.md                  # 私有环境复用时的空白调研模板
@@ -50,8 +52,11 @@ pidesk-design/
 ├── CHANGELOG.md                               # 用户可感知的版本变化
 ├── DEVELOPMENT.md                             # 分支、多电脑同步和任务交接流程
 ├── LICENSE                                    # MIT License
+├── package-lock.json                          # 固定 npm 依赖树
+├── package.json                               # Node.js 版本、依赖和检查命令
 ├── README.md                                  # 项目说明和入口
 ├── TASKS.md                                   # 任务总表、状态和下一步
+├── tsconfig.json                              # TypeScript 严格检查配置
 ├── product-decisions.md                       # 产品目标、范围和优先顺序
 ├── 01-product-principles.md                   # 产品与实现原则
 ├── 02-market-scenes.md                        # 跨产品办公场景库

@@ -6,7 +6,7 @@
 
 | 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 待开始 | `task/001-file-organization` | [根据内容批量重命名文件](scenarios/001-file-organization.md) | 列出 SDK 与 RPC 最小实验需要回答的问题 |
+| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 进行中 | `task/001-file-organization` | [根据内容批量重命名文件](scenarios/001-file-organization.md) | 创建并采纳 Pi 接入方式 ADR |
 
 ## 后续任务
 

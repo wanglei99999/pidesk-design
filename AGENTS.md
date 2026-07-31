@@ -41,7 +41,7 @@ Do not scan or load every document at task startup. Do not use chat history or l
 - Make risky operations previewable, confirmable, auditable, and recoverable.
 - Use deterministic or fake model responses in automated tests; do not use paid model calls.
 
-There is no permanent code check command yet. Record checks in each task, then update this file after the first code structure is established.
+After code changes, run `npm run check`. When a test file is created or modified, run its specific test command and record the result in the current task. Automated Agent tests must use deterministic or fake providers, never paid model calls.
 
 ## Project Records
 
