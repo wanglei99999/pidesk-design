@@ -6,13 +6,17 @@
 
 | 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 进行中 | `task/001-file-organization` | [根据内容批量重命名文件](scenarios/001-file-organization.md) | 创建并采纳 Pi 接入方式 ADR |
+| [TASK-002](tasks/TASK-002-react-workbench-prototype.md) | 实现 React 工作台前端原型 | 已提交 | `task/002-react-prototype` | 通用任务工作台 | 设计真实代码工作区和 Pi Agent 接入边界 |
 
 ## 后续任务
 
 后续场景按照用户价值、复杂度、复用价值和学习价值排序。每个任务都需要独立的范围和验收标准。
 
-TASK-001 完成后，优先为“工作区中的文档资料处理与生成”创建场景和 TASK，作为第一个用户可感知的产品纵向切片。具体文档类型和验收标准确认前不提前分配任务编号。
+TASK-002 提交后，优先实现真实代码工作区和代码开发任务闭环，再扩展“工作区中的文档资料处理与生成”。
+
+| 编号 | 任务 | 状态 | 说明 |
+|---|---|---|---|
+| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 暂停 | SDK 边界实验已完成；待前端原型评审后继续创建接入方式 ADR。 |
 
 ## 维护规则
 

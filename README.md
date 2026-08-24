@@ -16,9 +16,9 @@ PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办�
 
 ## 当前阶段
 
-项目基础文档、首批场景和最小 TypeScript 代码结构已经建立。当前任务是 [TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md)。它以根层 `.txt`、`.md` 文件批量重命名作为受控实验，验证 Pi 接入、Tool 调用、预览、确认、安全写入和执行记录，不把该实验当作 PiDesk 的首个完整产品功能。
+项目基础文档、首批场景和 Pi SDK 边界实验已经建立。当前任务是 [TASK-002：实现 React 工作台前端原型](tasks/TASK-002-react-workbench-prototype.md)，使用模拟数据验证 DeskBuddy 的工作区、任务时间线、操作确认、成果预览和继续输入体验，不在原型阶段接入真实模型或文件。
 
-TASK-001 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播。下一步是把“`pi-coding-agent` SDK + PiDesk 自有适配层”的接入结论写入 ADR，再实现具体业务闭环。TASK-001 完成后，项目进入“工作区中的文档资料处理与生成”纵向切片。
+[TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md) 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播，当前暂停业务实现。前端原型提交后，项目将先实现真实代码工作区和代码开发任务闭环，再扩展日常办公场景。
 
 ## 仓库结构
 
@@ -41,6 +41,7 @@ pidesk-design/
 ├── tasks/
 │   ├── TEMPLATE.md                            # 开发任务模板
 │   └── TASK-001-file-organization.md          # 当前开发任务及进度
+├── src/                                        # React 工作台前端原型
 ├── test/
 │   └── pi-coding-agent-sdk.test.ts            # SDK 接入边界与取消实验
 ├── templates/
