@@ -6,7 +6,7 @@
 
 | 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-002](tasks/TASK-002-react-workbench-prototype.md) | 实现 React 工作台前端原型 | 已提交 | `task/002-react-prototype` | 通用任务工作台 | 设计真实代码工作区和 Pi Agent 接入边界 |
+| [TASK-002](tasks/TASK-002-react-workbench-prototype.md) | 实现 React 工作台前端原型 | 已完成 | `task/002-react-prototype` | 通用任务工作台 | 设计真实代码工作区和 Pi Agent 接入边界 |
 
 ## 后续任务
 
