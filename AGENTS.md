@@ -21,11 +21,11 @@ Read other files only when needed:
 
 - `README.md`: project scope is unclear or changed;
 - `DEVELOPMENT.md`: creating, switching, handing off, or merging a task;
-- current `scenarios/` file: implementing or reviewing that scenario;
-- relevant `adr/` files: making or changing an architectural decision;
+- current `docs/scenarios/` file: implementing or reviewing that scenario;
+- relevant `docs/architecture/decisions/` files: making or changing an architectural decision;
 - only `[Unreleased]` in `CHANGELOG.md`: recording a user-visible change;
 - market and source documents: selecting or comparing product scenarios;
-- `templates/company-adaptation/`: only when explicitly adapting a completed scenario for a private environment.
+- `docs/templates/company-adaptation/`: only when explicitly adapting a completed scenario for a private environment.
 
 Do not scan or load every document at task startup. Do not use chat history or local notes as the only project record.
 
@@ -47,12 +47,12 @@ After code changes, run `npm run check`. When a test file is created or modified
 
 - Keep `TASKS.md` and the current task consistent.
 - Record progress, validation, blockers, and one next action in the task file.
-- Put product goals, scope, and priority in `product-decisions.md`.
+- Put product goals, scope, and priority in `docs/product/decisions.md`.
 - Create an ADR for decisions affecting multiple scenarios, security boundaries, or costly future changes.
 - Replace accepted ADRs with new ADRs; do not rewrite their history.
 - Record user-visible changes under `[Unreleased]` in `CHANGELOG.md`.
-- Follow `07-learning-guide.md` and record verified lessons in the current task or a dedicated learning record.
-- Add only repeated, verified practices to `06-development-rules.md`.
+- Follow `docs/development/pi-learning-guide.md` and record verified lessons in the current task or a dedicated learning record.
+- Add only repeated, verified practices to `docs/development/agent-development-rules.md`.
 
 ## Security
 
@@ -62,7 +62,7 @@ Private connectors, internal rules, credentials, and real data belong in an appr
 
 ## Git
 
-- Keep `main` verified; use one `task/NNN-short-name` branch per task.
+- Keep `main` verified. This single-maintainer repository defaults to working directly on `main`; use `task/NNN-short-name` only for isolated experiments, concurrent work, or Pull Request review.
 - Do not edit the same branch on multiple computers at the same time.
 - Resume with fetch and fast-forward-only pull.
 - Preserve unrelated changes and stage explicit paths only.

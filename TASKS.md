@@ -4,9 +4,9 @@
 
 ## 当前任务
 
-| 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
+| 编号 | 任务 | 状态 | 开发位置 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-003](tasks/TASK-003-pi-runner-architecture.md) | 设计真实工作区和 Pi Runner 架构 | 设计中 | `main` | 代码工作区中的 Agent 任务 | 用户审阅书面规范后编写实施计划 |
+| [TASK-003](tasks/TASK-003-pi-runner-architecture.md) | 设计真实工作区和 Pi Runner 架构 | 进行中 | `main` | 代码工作区中的 Agent 任务 | 编写只读代码工作区纵向切片实施计划 |
 
 ## 后续任务
 

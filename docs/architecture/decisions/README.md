@@ -2,7 +2,7 @@
 
 ADR 用于记录会影响多个场景、修改成本较高或涉及安全边界的技术决定。它回答的是“当时为什么这样设计”，不负责记录任务进度。
 
-产品目标、范围和优先顺序写入 [product-decisions.md](../product-decisions.md)，不创建 ADR。
+产品目标、范围和优先顺序写入 [产品决定](../../product/decisions.md)，不创建 ADR。
 
 ## 什么时候创建 ADR
 
@@ -38,7 +38,7 @@ ADR 用于记录会影响多个场景、修改成本较高或涉及安全边界�
 1. 从 [TEMPLATE.md](TEMPLATE.md) 创建新文件。
 2. 文件名使用四位编号和英文短名，例如 `0003-store-task-events.md`。
 3. 编号只增加，不重复使用。
-4. ADR 在对应任务分支中提出。
+4. ADR 在对应任务的当前开发位置中提出；单人维护可以直接在 `main` 完成，隔离实验或 Pull Request 审阅时使用任务分支。
 5. 已采纳的 ADR 不重写历史结论，只修正错别字或失效链接。
 6. 决定改变时创建新的 ADR，并将旧 ADR 标记为“已取代”。
 7. 任务文件应链接相关 ADR。
@@ -49,4 +49,5 @@ ADR 用于记录会影响多个场景、修改成本较高或涉及安全边界�
 |---|---|---|---|
 | [0001](0001-use-pi-as-agent-runtime.md) | 使用 Pi 作为 Agent 运行基础 | 已采纳 | 2026-07-30 |
 | [0002](0002-separate-public-core-and-private-adapters.md) | 分离公开产品与私有适配 | 已采纳 | 2026-07-30 |
-| [0003](0003-isolate-pi-in-runner.md) | 在独立 Runner 中运行 Pi | 提议 | 2026-08-24 |
+| [0003](0003-isolate-pi-in-runner.md) | 在独立 Runner 中运行 Pi | 已采纳 | 2026-08-24 |
+| [0004](0004-compose-capabilities-above-pi.md) | 在 Pi 运行时之上组织 DeskBuddy 能力包 | 已采纳 | 2026-08-24 |

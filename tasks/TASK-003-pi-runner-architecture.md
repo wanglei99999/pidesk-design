@@ -2,8 +2,8 @@
 
 ## 基本信息
 
-- 状态：设计中
-- 分支：`main`
+- 状态：进行中
+- 开发位置：`main`
 - 最后更新：2026-08-24
 - 关联场景：代码工作区中的 Agent 任务
 - 依赖任务：[TASK-001](TASK-001-file-organization.md)、[TASK-002](TASK-002-react-workbench-prototype.md)
@@ -19,8 +19,9 @@
 - 确定 Workspace、Task、AgentRun、Approval 和 Artifact 的最小数据模型；
 - 确定 Pi JSONL 与 SQLite 的权威数据分工；
 - 确定单活动运行、崩溃恢复和工作区重新关联规则；
-- 创建 ADR-0003 和可审阅的架构设计规范；
+- 创建 ADR-0003、ADR-0004 和可审阅的架构设计规范；
 - 更新旧 Pi 接入说明。
+- 将长期文档迁入按产品、架构、场景、研究和开发职责组织的 `docs/` 目录。
 
 ## 不在本次范围
 
@@ -38,8 +39,9 @@
 - [x] Tool、Extension、凭据和 Renderer 权限边界清楚；
 - [x] 正常运行、取消、崩溃和应用重启路径有确定结果；
 - [x] V1 范围和非目标明确；
-- [ ] 用户完成书面规范审阅；
-- [ ] ADR-0003 从“提议”更新为“已采纳”。
+- [x] 用户完成书面规范审阅；
+- [x] ADR-0003 从“提议”更新为“已采纳”；
+- [x] 文档目录、入口和仓库内链接与当前代码仓库结构一致。
 
 ## 计划
 
@@ -47,9 +49,9 @@
 - [x] 审计 `AgentSessionRuntime`、RPC、SessionManager、Extension 和 Tool；
 - [x] 对比 Pi 实验性 protocol/client/server 的可借鉴边界；
 - [x] 编写架构设计规范；
-- [x] 创建 ADR-0003；
+- [x] 创建 ADR-0003 和 ADR-0004；
 - [x] 更新 Pi 接入文档和项目入口；
-- [ ] 根据用户书面审阅意见修订；
+- [x] 根据用户书面审阅意见修订；
 - [ ] 编写分阶段实施计划。
 
 ## 最近进展
@@ -66,6 +68,8 @@
 - 并发：V1 全局只允许一个活动 AgentRun，一个 Pi 会话文件只允许一个 Runner 写入。
 - 恢复：补充临时 Runner 读取 Pi JSONL 并重建权威快照的路径，Control Plane 不直接解析 Pi 会话文件。
 - 可视化：总体架构图和任务执行时序图已同步到独立 Runner、官方 RPC、双存储和 V1 只读边界。
+- 文档：当前入口、产品定位、路线图、Pi 基线、开发流程、规范和 ADR 已按 DeskBuddy 最新设计统一；历史任务和已采纳 ADR 保留原始语境。
+- 目录：长期文档已迁入 `docs/product`、`docs/architecture`、`docs/scenarios`、`docs/research`、`docs/development`、`docs/plans` 和 `docs/templates`，根目录保留固定项目入口与任务记录。
 
 ## 验证记录
 
@@ -76,20 +80,21 @@
 | Pi `0.84.2` 类型和本地源码审计 | 核心结论均可由已发布公开接口支持 |
 | 规范占位、类型一致性、链接和 `git diff --check` | 通过 |
 | 架构图 XML、几何、构图校验与浏览器视觉检查 | 通过 |
+| 文档目录、旧路径扫描、Markdown 本地链接和 `git diff --check` | 通过 |
 
 ## 阻塞问题
 
-- 无实现阻塞；进入实施计划前需要用户审阅书面规范。
+- 无实现阻塞。
 
 ## 相关记录
 
-- ADR：[ADR-0003](../adr/0003-isolate-pi-in-runner.md)；
-- 设计规范：[DeskBuddy Pi Runner 架构设计](../docs/superpowers/specs/2026-08-24-deskbuddy-pi-runner-architecture-design.md)；
+- ADR：[ADR-0003](../docs/architecture/decisions/0003-isolate-pi-in-runner.md)、[ADR-0004](../docs/architecture/decisions/0004-compose-capabilities-above-pi.md)；
+- 设计规范：[DeskBuddy Pi Runner 架构设计](../docs/architecture/pi-runner-design.md)；
 - Changelog：本任务只调整内部架构文档，不记录用户可见变化。
 
 ## 下一步
 
-- 用户审阅书面规范；通过后把 ADR-0003 标记为“已采纳”，再编写分阶段实施计划。
+- 编写只读代码工作区纵向切片的分阶段实施计划。
 
 ## 完成记录
 

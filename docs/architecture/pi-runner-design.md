@@ -1,11 +1,11 @@
 # DeskBuddy Pi Runner 架构设计
 
-- 状态：待书面审阅
+- 状态：已确认
 - 日期：2026-08-24
 - Pi 基线：`0.84.2`
-- 相关任务：[TASK-003](../../../tasks/TASK-003-pi-runner-architecture.md)
-- 相关决定：[ADR-0001](../../../adr/0001-use-pi-as-agent-runtime.md)、[ADR-0003](../../../adr/0003-isolate-pi-in-runner.md)
-- 可视化：[总体架构图](../../architecture/deskbuddy-pi-runner-architecture.svg)、[任务执行时序图](../../architecture/deskbuddy-task-execution-sequence.svg)
+- 相关任务：[TASK-003](../../tasks/TASK-003-pi-runner-architecture.md)
+- 相关决定：[ADR-0001](decisions/0001-use-pi-as-agent-runtime.md)、[ADR-0003](decisions/0003-isolate-pi-in-runner.md)、[ADR-0004](decisions/0004-compose-capabilities-above-pi.md)
+- 可视化：[总体架构图](diagrams/deskbuddy-pi-runner-architecture.svg)、[任务执行时序图](diagrams/deskbuddy-task-execution-sequence.svg)
 
 ## 1. 目标
 

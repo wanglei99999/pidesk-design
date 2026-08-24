@@ -1,8 +1,8 @@
-# PiDesk
+# DeskBuddy
 
-PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办公 Agent 工作台。它以任务和工作区为主要使用方式，让用户通过自然语言调用文件、Skill 和连接器，完成可检查、可继续、可复用，并逐步支持自动执行的办公任务。
+DeskBuddy 是一个由 [Pi](https://github.com/earendil-works/pi) 驱动的开源本地桌面 Agent 工作台。它以 Coding Agent 作为基础能力，以任务和工作区组织持续工作，并通过受控能力包逐步扩展文档、表格和其他办公场景。
 
-市面办公 Agent 产品用于理解已经存在的用户任务、能力组织和交付方式。PiDesk 独立设计自己的任务执行链路和产品实现，不照抄产品表现，也不猜测其内部实现。
+DeskBuddy 不是 Pi 的官方前端，也不复制 Pi CLI。Pi 提供 Agent 运行时，DeskBuddy 负责桌面产品体验、权限、审批、产物和持久化。市面办公 Agent 产品只用于理解已经存在的用户任务、能力组织和交付方式。
 
 ## 项目目标
 
@@ -12,13 +12,21 @@ PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办�
 
 项目不以增加独立小工具或页面数量为主线。每个场景都用于验证同一条公共链路：创建任务、加载上下文、调用能力、生成或修改产物、检查结果、继续处理并保存记录。
 
-更具体的范围和优先顺序见 [产品决定](product-decisions.md)，长期设计原则见 [产品原则](01-product-principles.md)。
+产品按三层组织：
+
+1. **DeskBuddy 产品壳**：任务、工作区、会话界面、审批、产物、权限和产品数据；
+2. **Pi Runner**：模型循环、Tool 调用、Pi 会话、Skill 和 Extension；
+3. **DeskBuddy 能力包**：组合受控 Tool、确定性服务、第一方 Skill/Extension 和声明式界面，提供 Coding 与办公能力。
+
+更具体的范围和优先顺序见 [产品决定](docs/product/decisions.md)，长期设计原则见 [产品原则](docs/product/principles.md)。
 
 ## 当前阶段
 
-项目基础文档、首批场景、Pi SDK 边界实验和 React 工作台原型已经建立。当前任务是 [TASK-003：设计真实工作区和 Pi Runner 架构](tasks/TASK-003-pi-runner-architecture.md)，确定 Electron Control Plane、独立 Pi Runner、会话持久化和工作区权限边界。
+项目基础文档、首批场景、Pi SDK 边界实验、React 工作台原型和 Pi Runner 架构已经建立。当前任务是 [TASK-003：设计真实工作区和 Pi Runner 架构](tasks/TASK-003-pi-runner-architecture.md)，下一步为第一个只读代码工作区纵向切片编写实施计划。
 
-[TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md) 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播。[TASK-002：React 工作台前端原型](tasks/TASK-002-react-workbench-prototype.md) 已完成。架构规范通过审阅后，项目将先实现真实代码工作区和只读 Pi Agent 纵向切片，再逐步开放受控修改能力和日常办公场景。
+[TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md) 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播。[TASK-002：React 工作台前端原型](tasks/TASK-002-react-workbench-prototype.md) 已完成。当前先实现真实代码工作区和只读 Pi Agent 纵向切片，再逐步开放受控修改能力和办公能力包。
+
+历史任务、ADR 和研究记录中的 “PiDesk” 是 DeskBuddy 的旧名称。代码目录、包名和内部标识可以继续使用 `pidesk`，公开产品名称统一为 DeskBuddy。
 
 ## 仓库结构
 
@@ -26,23 +34,19 @@ PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办�
 pidesk-design/
 ├── .github/
 │   └── pull_request_template.md               # PR 验收、记录和公开仓库检查
-├── adr/
-│   ├── README.md                              # ADR 使用规则和决策索引
-│   ├── TEMPLATE.md                            # 新架构决定模板
-│   ├── 0001-use-pi-as-agent-runtime.md        # 采用 Pi 作为 Agent 运行基础
-│   ├── 0002-separate-public-core-and-private-adapters.md
-│   │                                            # 公开产品与私有适配的边界
-│   └── 0003-isolate-pi-in-runner.md            # 独立 Runner 和官方 RPC 边界
 ├── docs/
-│   └── superpowers/
-│       ├── plans/                              # 已确认规范的实施计划
-│       └── specs/                              # 经讨论形成的架构设计规范
-├── research/
-│   └── products/
-│       └── workbuddy.md                       # WorkBuddy 公开事实与 PiDesk 分析
-├── scenarios/
-│   ├── TEMPLATE.md                            # 场景说明模板
-│   └── 001-file-organization.md               # 文本文件批量重命名场景
+│   ├── README.md                               # 文档导航和职责边界
+│   ├── product/                                # 产品决定、原则、路线和场景筛选
+│   ├── architecture/
+│   │   ├── decisions/                          # ADR 使用规则、模板和决策记录
+│   │   ├── diagrams/                           # 架构图和任务执行时序图
+│   │   ├── pi-integration.md                   # Pi 接入边界
+│   │   └── pi-runner-design.md                 # 已确认的 Runner 架构规范
+│   ├── scenarios/                              # 场景需求、风险和验收标准
+│   ├── research/                               # 外部来源和产品研究
+│   ├── development/                            # Agent 开发规则和学习指南
+│   ├── plans/                                  # 已确认设计的实施计划
+│   └── templates/                              # 公司适配等复用模板
 ├── tasks/
 │   ├── TEMPLATE.md                            # 开发任务模板
 │   ├── TASK-001-file-organization.md          # Pi SDK 边界实验
@@ -51,9 +55,6 @@ pidesk-design/
 ├── src/                                        # React 工作台前端原型
 ├── test/
 │   └── pi-coding-agent-sdk.test.ts            # SDK 接入边界与取消实验
-├── templates/
-│   └── company-adaptation/
-│       └── task-inventory.md                  # 私有环境复用时的空白调研模板
 ├── .gitattributes                             # 文本和换行符规则
 ├── .gitignore                                 # 凭据、依赖、产物和本机文件排除规则
 ├── AGENTS.md                                  # AI Agent 与开发者的仓库规则
@@ -65,23 +66,15 @@ pidesk-design/
 ├── README.md                                  # 项目说明和入口
 ├── TASKS.md                                   # 任务总表、状态和下一步
 ├── tsconfig.json                              # TypeScript 严格检查配置
-├── product-decisions.md                       # 产品目标、范围和优先顺序
-├── 01-product-principles.md                   # 产品与实现原则
-├── 02-market-scenes.md                        # 跨产品办公场景库
-├── 03-scene-analysis.md                       # 场景选择与分析方法
-├── 04-pi-integration-plan.md                  # Pi 能力、接入候选和验证计划
-├── 05-product-roadmap.md                      # 产品能力演进顺序
-├── 06-development-rules.md                    # 安全基线和待验证实践
-├── 07-learning-guide.md                       # Pi 与 Agent 学习方法
-└── sources.md                                 # 可追溯的市面产品和 Pi 资料
+└── vite.config.ts                             # Vite 开发和构建配置
 ```
 
 ## 开发方式
 
 推进一个场景或产品能力时：
 
-1. 从实际工作或 [市场场景库](02-market-scenes.md) 中选择具体问题；
-2. 用 [场景模板](scenarios/TEMPLATE.md) 写清用户、输入、输出、风险和验收；
+1. 从实际工作或 [市场场景库](docs/product/market-scenes.md) 中选择具体问题；
+2. 用 [场景模板](docs/scenarios/TEMPLATE.md) 写清用户、输入、输出、风险和验收；
 3. 创建任务文件，收窄本次范围并记录唯一下一步；
 4. 把 Pi 能力当作候选，用最小代码实验确认接入和边界；
 5. 接入公共任务链路，避免为每个场景建设孤立入口；
@@ -90,16 +83,17 @@ pidesk-design/
 
 规范不是一次写死的。安全基线直接执行，其他做法只有经过实际任务重复验证后才升级为长期规则。
 
-跨电脑开发按照 [开发流程](DEVELOPMENT.md) 更新任务文件并推送当前任务分支，任何电脑都以 GitHub 上的最新提交为同步来源。
+跨电脑开发按照 [开发流程](DEVELOPMENT.md) 更新任务文件并推送当前开发位置，任何电脑都以 GitHub 上的最新提交为同步来源。单人维护默认直接使用 `main`；需要隔离实验、并行工作或 Pull Request 审阅时再创建任务分支。
 
 ## 常用入口
 
 - [当前任务](TASKS.md)
+- [文档导航](docs/README.md)
 - [开发流程](DEVELOPMENT.md)
-- [产品决定](product-decisions.md)
-- [架构决定](adr/README.md)
-- [市场场景](02-market-scenes.md)
-- [Pi 接入计划](04-pi-integration-plan.md)
+- [产品决定](docs/product/decisions.md)
+- [架构决定](docs/architecture/decisions/README.md)
+- [市场场景](docs/product/market-scenes.md)
+- [Pi 接入方案](docs/architecture/pi-integration.md)
 
 ## 许可证
 

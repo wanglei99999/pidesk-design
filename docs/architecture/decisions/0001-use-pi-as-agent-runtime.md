@@ -2,7 +2,7 @@
 
 - 状态：已采纳
 - 日期：2026-07-30
-- 相关任务：[TASK-001](../tasks/TASK-001-file-organization.md)
+- 相关任务：[TASK-001](../../../tasks/TASK-001-file-organization.md)
 - 取代：无
 - 被取代：无
 

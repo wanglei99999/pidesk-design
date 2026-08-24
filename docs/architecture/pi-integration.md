@@ -6,14 +6,14 @@
 
 已经确认：
 
-- Pi 是 DeskBuddy 唯一的 Agent 执行基础，见 [ADR-0001](adr/0001-use-pi-as-agent-runtime.md)；
+- Pi 是 DeskBuddy 唯一的 Agent 执行基础，见 [ADR-0001](decisions/0001-use-pi-as-agent-runtime.md)；
 - Pi SDK 运行在独立 Runner 子进程内；
 - Electron Control Plane 通过 Pi 官方 JSONL RPC 协议控制 Runner；
 - DeskBuddy 维护薄的可靠传输适配层，不把现有 `RpcClient` 直接作为产品边界；
 - Pi JSONL 保存会话和消息树，DeskBuddy SQLite 保存产品元数据；
-- 具体边界见 [ADR-0003](adr/0003-isolate-pi-in-runner.md) 和[架构设计规范](docs/superpowers/specs/2026-08-24-deskbuddy-pi-runner-architecture-design.md)。
+- 具体边界见 [ADR-0003](decisions/0003-isolate-pi-in-runner.md) 和[架构设计规范](pi-runner-design.md)。
 
-ADR-0003 在书面规范通过审阅前保持“提议”状态。
+架构规范已经确认，ADR-0003 已采纳。后续实现必须保持独立 Runner、官方 RPC、双存储和 V1 只读边界。
 
 ## Pi 负责什么
 

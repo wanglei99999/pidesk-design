@@ -5,7 +5,7 @@
 - 状态：进行中
 - 分支：`task/001-file-organization`
 - 最后更新：2026-07-31
-- 关联场景：[根据内容批量重命名文件](../scenarios/001-file-organization.md)
+- 关联场景：[根据内容批量重命名文件](../docs/scenarios/001-file-organization.md)
 - 依赖任务：无
 
 ## 目标
@@ -276,10 +276,10 @@
 
 ## 相关记录
 
-- ADR：[ADR-0001：使用 Pi 作为 Agent 运行基础](../adr/0001-use-pi-as-agent-runtime.md)；
+- ADR：[ADR-0001：使用 Pi 作为 Agent 运行基础](../docs/architecture/decisions/0001-use-pi-as-agent-runtime.md)；
 - ADR 需求：需要新增接入方式 ADR，记录 `pi-coding-agent` SDK、PiDesk 自有适配层以及暂不使用 RPC/直接接入 agent-core 的决定；
-- 技术计划：[Pi 接入计划](../04-pi-integration-plan.md)；
-- 后续产品切片：[产品路线阶段 2](../05-product-roadmap.md)；
+- 技术计划：[Pi 接入方案](../docs/architecture/pi-integration.md)；
+- 后续产品切片：[产品路线阶段 2](../docs/product/roadmap.md)；
 - Changelog：本次仅建立内部实验和测试基础，不产生用户可感知变化，暂不记录。
 
 ## 下一步

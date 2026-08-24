@@ -1,8 +1,8 @@
 # ADR-0003：在独立 Runner 中运行 Pi
 
-- 状态：提议
+- 状态：已采纳
 - 日期：2026-08-24
-- 相关任务：[TASK-003](../tasks/TASK-003-pi-runner-architecture.md)
+- 相关任务：[TASK-003](../../../tasks/TASK-003-pi-runner-architecture.md)
 - 取代：无
 - 被取代：无
 

@@ -17,7 +17,7 @@
 
 ## 当前学习基线
 
-PiDesk 当前分析基于 Pi `0.80.10` 和提交 `eb8dd587e780b5393f53635002004cb2b5ef8f92`。固定资料见 [资料来源](sources.md)。升级 Pi 后，需要重新验证相关结论。
+DeskBuddy 当前实现基线为 Pi `0.84.2`，对应提交 `914cf1472e715297caa30db4b9535d534a9eb718`。TASK-001 的 `0.80.10` 结论作为历史实验保留；当前架构结论以 TASK-003 对 `0.84.2` 的 SDK、RPC、Session、Extension 和 Tool 审计为准。固定资料见 [资料来源](../research/sources.md)。
 
 ## 场景与候选学习内容
 
@@ -26,6 +26,7 @@ PiDesk 当前分析基于 Pi `0.80.10` 和提交 `eb8dd587e780b5393f53635002004c
 | 场景 | Pi 候选内容 | Agent 学习内容 |
 |---|---|---|
 | 运行闭环验证（文件重命名实验） | SDK、RPC、AgentSession、Tool | 工具选择、结构化计划、参数校验、写入确认 |
+| 只读代码工作区 | AgentSessionRuntime、RPC、SessionManager、Tool | 进程隔离、会话恢复、路径边界、流式状态 |
 | 工作区文档处理 | Session、ResourceLoader、Tool 输出 | 任务上下文、产物、多轮修改、状态边界 |
 | 会议材料整理 | Skill、ResourceLoader、Session | 长文本、信息提取、结构化结果 |
 | 文档与演示文稿 | Extension、Tool 输出 | 文件生成、多轮修改、产物校验 |
