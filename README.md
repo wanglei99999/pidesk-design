@@ -16,9 +16,9 @@ PiDesk 是一个基于 [Pi](https://github.com/earendil-works/pi) 的独立办�
 
 ## 当前阶段
 
-项目基础文档、首批场景和 Pi SDK 边界实验已经建立。当前任务是 [TASK-002：实现 React 工作台前端原型](tasks/TASK-002-react-workbench-prototype.md)，使用模拟数据验证 DeskBuddy 的工作区、任务时间线、操作确认、成果预览和继续输入体验，不在原型阶段接入真实模型或文件。
+项目基础文档、首批场景、Pi SDK 边界实验和 React 工作台原型已经建立。当前任务是 [TASK-003：设计真实工作区和 Pi Runner 架构](tasks/TASK-003-pi-runner-architecture.md)，确定 Electron Control Plane、独立 Pi Runner、会话持久化和工作区权限边界。
 
-[TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md) 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播，当前暂停业务实现。前端原型提交后，项目将先实现真实代码工作区和代码开发任务闭环，再扩展日常办公场景。
+[TASK-001：验证 Pi 办公 Agent 最小运行闭环](tasks/TASK-001-file-organization.md) 已通过公开 `pi-coding-agent` SDK 和 faux provider 验证自定义提示词、Tool 白名单、运行事件和取消传播。[TASK-002：React 工作台前端原型](tasks/TASK-002-react-workbench-prototype.md) 已完成。架构规范通过审阅后，项目将先实现真实代码工作区和只读 Pi Agent 纵向切片，再逐步开放受控修改能力和日常办公场景。
 
 ## 仓库结构
 
@@ -30,8 +30,13 @@ pidesk-design/
 │   ├── README.md                              # ADR 使用规则和决策索引
 │   ├── TEMPLATE.md                            # 新架构决定模板
 │   ├── 0001-use-pi-as-agent-runtime.md        # 采用 Pi 作为 Agent 运行基础
-│   └── 0002-separate-public-core-and-private-adapters.md
-│                                                # 公开产品与私有适配的边界
+│   ├── 0002-separate-public-core-and-private-adapters.md
+│   │                                            # 公开产品与私有适配的边界
+│   └── 0003-isolate-pi-in-runner.md            # 独立 Runner 和官方 RPC 边界
+├── docs/
+│   └── superpowers/
+│       ├── plans/                              # 已确认规范的实施计划
+│       └── specs/                              # 经讨论形成的架构设计规范
 ├── research/
 │   └── products/
 │       └── workbuddy.md                       # WorkBuddy 公开事实与 PiDesk 分析
@@ -40,7 +45,9 @@ pidesk-design/
 │   └── 001-file-organization.md               # 文本文件批量重命名场景
 ├── tasks/
 │   ├── TEMPLATE.md                            # 开发任务模板
-│   └── TASK-001-file-organization.md          # 当前开发任务及进度
+│   ├── TASK-001-file-organization.md          # Pi SDK 边界实验
+│   ├── TASK-002-react-workbench-prototype.md  # React 工作台原型
+│   └── TASK-003-pi-runner-architecture.md     # 当前架构设计任务
 ├── src/                                        # React 工作台前端原型
 ├── test/
 │   └── pi-coding-agent-sdk.test.ts            # SDK 接入边界与取消实验

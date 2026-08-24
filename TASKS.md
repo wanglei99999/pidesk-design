@@ -6,7 +6,7 @@
 
 | 编号 | 任务 | 状态 | 分支 | 关联场景 | 下一步 |
 |---|---|---|---|---|---|
-| [TASK-002](tasks/TASK-002-react-workbench-prototype.md) | 实现 React 工作台前端原型 | 已完成 | `task/002-react-prototype` | 通用任务工作台 | 设计真实代码工作区和 Pi Agent 接入边界 |
+| [TASK-003](tasks/TASK-003-pi-runner-architecture.md) | 设计真实工作区和 Pi Runner 架构 | 设计中 | `main` | 代码工作区中的 Agent 任务 | 用户审阅书面规范后编写实施计划 |
 
 ## 后续任务
 
@@ -16,7 +16,8 @@ TASK-002 提交后，优先实现真实代码工作区和代码开发任务闭�
 
 | 编号 | 任务 | 状态 | 说明 |
 |---|---|---|---|
-| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 暂停 | SDK 边界实验已完成；待前端原型评审后继续创建接入方式 ADR。 |
+| [TASK-001](tasks/TASK-001-file-organization.md) | 验证 Pi 办公 Agent 最小运行闭环 | 暂停 | SDK 边界实验已完成；接入结论已转入 TASK-003 和 ADR-0003。 |
+| [TASK-002](tasks/TASK-002-react-workbench-prototype.md) | 实现 React 工作台前端原型 | 已完成 | 工作台原型、关键交互和响应式视觉验证已完成。 |
 
 ## 维护规则
 

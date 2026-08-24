@@ -1,0 +1,269 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+<title id="title">DeskBuddy V1 Pi Runner 系统架构</title>
+<desc id="desc">React 通过 Electron Control Plane 调用独立 Pi Runner。Pi JSONL 保存会话，SQLite 保存产品元数据，受控只读工具限制工作区访问。</desc>
+<defs>
+  <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#356ae6"/></marker>
+  <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7257d8"/></marker>
+  <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/></marker>
+  <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#18a36b"/></marker>
+  <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#697386"/></marker>
+</defs>
+<rect x="0" y="0" width="1600" height="1100" rx="0" fill="#f6f7fa" stroke="none" stroke-width="1.0"/>
+<rect x="24" y="24" width="1552" height="1052" rx="24" fill="#ffffff" stroke="#e1e5eb" stroke-width="1"/>
+<text x="58" y="70" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="29" font-weight="760" fill="#111827" text-anchor="start">DeskBuddy V1 · 独立 Pi Runner 系统架构</text>
+<text x="58" y="99" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="450" fill="#697386" text-anchor="start">Pi 是唯一执行器；Electron 掌握产品状态、进程所有权和权限边界。</text>
+<rect x="1362" y="51" width="160" height="28" rx="14" fill="#fff0da" stroke="none" stroke-width="1.0"/>
+<text x="1442" y="70" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#a65300" text-anchor="middle" letter-spacing="0.05em">PI 0.84.2 · V1</text>
+<g data-graph-role="container" data-container-id="client">
+<rect x="50" y="125" width="250" height="670" rx="18" fill="#f7faff" stroke="#90b2f5" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="70" y="154" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="760" fill="#2859c5" text-anchor="start" letter-spacing="0.08em">CLIENT</text>
+<text x="70" y="177" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="450" fill="#697386" text-anchor="start">不持有系统权限</text>
+</g>
+<g data-graph-role="container" data-container-id="control">
+<rect x="330" y="125" width="440" height="670" rx="18" fill="#f7faff" stroke="#90b2f5" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="350" y="154" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="760" fill="#2859c5" text-anchor="start" letter-spacing="0.08em">ELECTRON CONTROL PLANE</text>
+<text x="350" y="177" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="450" fill="#697386" text-anchor="start">产品状态 · 所有权 · 治理</text>
+</g>
+<g data-graph-role="container" data-container-id="boundary">
+<rect x="800" y="125" width="200" height="670" rx="18" fill="#faf8ff" stroke="#b8a9ee" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="820" y="154" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="760" fill="#6247c7" text-anchor="start" letter-spacing="0.08em">PROCESS BOUNDARY</text>
+<text x="820" y="177" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="450" fill="#697386" text-anchor="start">官方协议 + 私有通道</text>
+</g>
+<g data-graph-role="container" data-container-id="runner">
+<rect x="1030" y="125" width="520" height="670" rx="18" fill="#fffaf3" stroke="#e0a34d" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="1050" y="154" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="760" fill="#a65300" text-anchor="start" letter-spacing="0.08em">DESKBUDDY PI RUNNER</text>
+<text x="1050" y="177" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="450" fill="#697386" text-anchor="start">独立 Node 子进程 · 可强制终止</text>
+</g>
+<g data-graph-role="container" data-container-id="resources">
+<rect x="50" y="830" width="1500" height="160" rx="18" fill="#f5fcf8" stroke="#73cba5" stroke-width="1.4" stroke-dasharray="7 6"/>
+<text x="70" y="859" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="760" fill="#14734d" text-anchor="start" letter-spacing="0.08em">LOCAL RESOURCES</text>
+<text x="70" y="882" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="450" fill="#697386" text-anchor="start">应用私有存储与用户授权资源</text>
+</g>
+<g data-graph-role="edge" data-edge-id="ui-preload" data-source="react-renderer" data-target="secure-preload">
+<path d="M 175 282 V 340" fill="none" stroke="#356ae6" stroke-width="2.1" marker-end="url(#arrow-blue)"/>
+<text x="188" y="315" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#356ae6" text-anchor="start">UI 调用</text>
+</g>
+<g data-graph-role="edge" data-edge-id="ipc-command" data-source="secure-preload" data-target="run-coordinator">
+<path d="M 270 382 H 330 V 397 H 360" fill="none" stroke="#356ae6" stroke-width="2.1" marker-end="url(#arrow-blue)"/>
+<text x="315" y="371" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#356ae6" text-anchor="middle">typed IPC</text>
+</g>
+<g data-graph-role="edge" data-edge-id="task-db" data-source="workspace-task" data-target="sqlite">
+<path d="M 540 241 H 570" fill="none" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)"/>
+<text x="555" y="231" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#18a36b" text-anchor="middle">事务</text>
+</g>
+<g data-graph-role="edge" data-edge-id="run-db" data-source="run-coordinator" data-target="sqlite">
+<path d="M 455 350 V 310 H 655 V 282" fill="none" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)"/>
+<text x="555" y="300" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#18a36b" text-anchor="middle">状态 / revision</text>
+</g>
+<g data-graph-role="edge" data-edge-id="run-rpc" data-source="run-coordinator" data-target="pi-rpc">
+<path d="M 550 397 H 785 V 302 H 825" fill="none" stroke="#356ae6" stroke-width="2.1" marker-end="url(#arrow-blue)"/>
+<text x="670" y="386" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#356ae6" text-anchor="middle">start · prompt · abort</text>
+</g>
+<g data-graph-role="edge" data-edge-id="rpc-command" data-source="pi-rpc" data-target="agent-runtime">
+<path d="M 975 283 H 1090 V 260 H 1170" fill="none" stroke="#356ae6" stroke-width="2.1" marker-end="url(#arrow-blue)"/>
+<text x="1070" y="248" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#356ae6" text-anchor="middle">官方 JSONL 命令</text>
+</g>
+<g data-graph-role="edge" data-edge-id="rpc-event" data-source="agent-runtime" data-target="pi-rpc">
+<path d="M 1170 310 H 1080 V 333 H 975" fill="none" stroke="#697386" stroke-width="2.1" marker-end="url(#arrow-gray)" stroke-dasharray="7 6"/>
+<text x="1060" y="325" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#697386" text-anchor="middle">Pi events</text>
+</g>
+<g data-graph-role="edge" data-edge-id="rpc-projector" data-source="pi-rpc" data-target="event-projector">
+<path d="M 825 338 H 790 V 397 H 740" fill="none" stroke="#697386" stroke-width="2.1" marker-end="url(#arrow-gray)" stroke-dasharray="7 6"/>
+<text x="786" y="386" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#697386" text-anchor="middle">原始事件</text>
+</g>
+<g data-graph-role="edge" data-edge-id="snapshot-ui" data-source="event-projector" data-target="secure-preload">
+<path d="M 570 420 V 475 H 300 V 400 H 270" fill="none" stroke="#697386" stroke-width="2.1" marker-end="url(#arrow-gray)" stroke-dasharray="7 6"/>
+<text x="435" y="465" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#697386" text-anchor="middle">RunProgress / RunSnapshot</text>
+</g>
+<g data-graph-role="edge" data-edge-id="approval-rpc" data-source="approval-credential" data-target="pi-rpc">
+<path d="M 740 535 H 785 V 330 H 825" fill="none" stroke="#d97706" stroke-width="2.1" marker-end="url(#arrow-orange)"/>
+<text x="779" y="455" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#d97706" text-anchor="middle">审批响应</text>
+</g>
+<g data-graph-role="edge" data-edge-id="credential-channel" data-source="approval-credential" data-target="credential-ipc">
+<path d="M 740 565 H 825" fill="none" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)"/>
+<text x="782" y="554" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#7257d8" text-anchor="middle">凭据请求</text>
+</g>
+<g data-graph-role="edge" data-edge-id="credential-runner" data-source="credential-ipc" data-target="model-runtime">
+<path d="M 975 545 H 1015 V 690 H 1290 V 610 H 1310" fill="none" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)"/>
+<text x="1135" y="680" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#7257d8" text-anchor="middle">内存通道</text>
+</g>
+<g data-graph-role="edge" data-edge-id="vault-broker" data-source="os-vault" data-target="approval-credential">
+<path d="M 455 865 V 615" fill="none" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)" stroke-dasharray="7 6"/>
+<text x="470" y="770" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#18a36b" text-anchor="start">受保护读取</text>
+</g>
+<g data-graph-role="edge" data-edge-id="resource-session" data-source="resource-loader" data-target="agent-runtime">
+<path d="M 1165 400 V 330" fill="none" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)" stroke-dasharray="7 6"/>
+<text x="1178" y="370" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#7257d8" text-anchor="start">显式加载</text>
+</g>
+<g data-graph-role="edge" data-edge-id="policy-session" data-source="policy-extension" data-target="agent-runtime">
+<path d="M 1415 400 V 365 H 1360 V 330" fill="none" stroke="#d97706" stroke-width="2.1" marker-end="url(#arrow-orange)"/>
+<text x="1404" y="354" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#d97706" text-anchor="middle">hook / confirm</text>
+</g>
+<g data-graph-role="edge" data-edge-id="session-tools" data-source="agent-runtime" data-target="governed-tools">
+<path d="M 1210 330 V 365 H 1288 V 610 H 1270" fill="none" stroke="#d97706" stroke-width="2.1" marker-end="url(#arrow-orange)"/>
+<text x="1277" y="530" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#d97706" text-anchor="middle">Tool call</text>
+</g>
+<g data-graph-role="edge" data-edge-id="session-model" data-source="agent-runtime" data-target="model-runtime">
+<path d="M 1370 330 V 365 H 1530 V 610 H 1520" fill="none" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)"/>
+<text x="1518" y="520" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#7257d8" text-anchor="end">model stream</text>
+</g>
+<g data-graph-role="edge" data-edge-id="session-jsonl" data-source="agent-runtime" data-target="pi-jsonl">
+<path d="M 1290 330 V 805 H 1135 V 865" fill="none" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)" stroke-dasharray="7 6"/>
+<text x="1302" y="748" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#18a36b" text-anchor="start">append session</text>
+</g>
+<g data-graph-role="edge" data-edge-id="tools-workspace" data-source="governed-tools" data-target="workspace-root">
+<path d="M 1165 660 V 760 H 860 V 865" fill="none" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)"/>
+<text x="1015" y="750" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#18a36b" text-anchor="middle">只读 I/O</text>
+</g>
+<g data-graph-role="edge" data-edge-id="model-provider" data-source="model-runtime" data-target="model-provider">
+<path d="M 1415 660 V 865" fill="none" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)"/>
+<text x="1428" y="770" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="650" fill="#7257d8" text-anchor="start">Provider stream</text>
+</g>
+<g data-graph-role="node" data-node-id="react-renderer">
+<rect x="80" y="200" width="190" height="82" rx="12" fill="#edf4ff" stroke="#356ae6" stroke-width="1.4"/>
+<text x="175" y="230" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">React Renderer</text>
+<text x="175" y="254" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">DeskBuddy UI</text>
+<text x="175" y="273" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">只消费产品 DTO</text>
+</g>
+<g data-graph-role="node" data-node-id="secure-preload">
+<rect x="80" y="340" width="190" height="82" rx="12" fill="#edf4ff" stroke="#356ae6" stroke-width="2.4"/>
+<rect x="85" y="345" width="180" height="72" rx="8" fill="none" stroke="#356ae6" stroke-width="0.8"/>
+<text x="175" y="370" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="720" fill="#182230" text-anchor="middle">Secure Preload</text>
+<text x="175" y="394" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">窄 IPC bridge</text>
+<text x="175" y="413" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">contextIsolation</text>
+</g>
+<g data-graph-role="node" data-node-id="renderer-limit">
+<rect x="80" y="515" width="190" height="112" rx="12" fill="#f7f8fa" stroke="#98a2b3" stroke-width="1.4"/>
+<text x="175" y="545" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Renderer 边界</text>
+<text x="175" y="569" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">无 Node 权限</text>
+<text x="175" y="588" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">无文件系统句柄</text>
+<text x="175" y="607" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">无任意 Pi RPC</text>
+</g>
+<g data-graph-role="node" data-node-id="workspace-task">
+<rect x="360" y="200" width="180" height="82" rx="12" fill="#edf4ff" stroke="#356ae6" stroke-width="1.4"/>
+<text x="450" y="230" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Workspace / Task</text>
+<text x="450" y="254" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">目录授权 · Task</text>
+<text x="450" y="273" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Pi session 指针</text>
+</g>
+<g data-graph-role="node" data-node-id="sqlite">
+<rect x="570" y="200" width="170" height="82" rx="12" fill="#e9f8f1" stroke="#18a36b" stroke-width="1.4"/>
+<text x="655" y="230" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">SQLite</text>
+<text x="655" y="254" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Run · Approval</text>
+<text x="655" y="273" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Artifact · revision</text>
+</g>
+<g data-graph-role="node" data-node-id="run-coordinator">
+<rect x="360" y="350" width="190" height="95" rx="12" fill="#edf4ff" stroke="#356ae6" stroke-width="2.4"/>
+<rect x="365" y="355" width="180" height="85" rx="8" fill="none" stroke="#356ae6" stroke-width="0.8"/>
+<text x="455" y="380" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="720" fill="#182230" text-anchor="middle">RunCoordinator</text>
+<text x="455" y="404" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">一个活动 AgentRun</text>
+<text x="455" y="423" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">SessionLease · Supervisor</text>
+</g>
+<g data-graph-role="node" data-node-id="event-projector">
+<rect x="570" y="350" width="170" height="95" rx="12" fill="#f7f8fa" stroke="#697386" stroke-width="1.4"/>
+<text x="655" y="380" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">PiEventProjector</text>
+<text x="655" y="404" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">原始事件 → 产品快照</text>
+<text x="655" y="423" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">revision 单调递增</text>
+</g>
+<g data-graph-role="node" data-node-id="approval-credential">
+<rect x="360" y="510" width="380" height="105" rx="12" fill="#fff4df" stroke="#d97706" stroke-width="1.4"/>
+<text x="550" y="540" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">ApprovalService + CredentialBroker</text>
+<text x="550" y="564" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">审批记录与 Extension UI 响应</text>
+<text x="550" y="583" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">操作系统保护凭据 · 不进入日志</text>
+</g>
+<rect x="385" y="674" width="155" height="28" rx="14" fill="#e7efff" stroke="none" stroke-width="1.0"/>
+<text x="462" y="693" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#2859c5" text-anchor="middle" letter-spacing="0.05em">ONE ACTIVE RUN</text>
+<rect x="555" y="674" width="160" height="28" rx="14" fill="#e9f8f1" stroke="none" stroke-width="1.0"/>
+<text x="635" y="693" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#14734d" text-anchor="middle" letter-spacing="0.05em">SINGLE WRITER</text>
+<g data-graph-role="node" data-node-id="pi-rpc">
+<rect x="825" y="250" width="150" height="105" rx="12" fill="#f2efff" stroke="#7257d8" stroke-width="2.4"/>
+<rect x="830" y="255" width="140" height="95" rx="8" fill="none" stroke="#7257d8" stroke-width="0.8"/>
+<text x="900" y="280" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="720" fill="#182230" text-anchor="middle">PiRpcTransport</text>
+<text x="900" y="304" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">get_state 握手</text>
+<text x="900" y="323" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">期限 · 校验 · 取消</text>
+</g>
+<g data-graph-role="node" data-node-id="credential-ipc">
+<rect x="825" y="500" width="150" height="90" rx="12" fill="#f7f8fa" stroke="#697386" stroke-width="1.4"/>
+<text x="900" y="530" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Credential IPC</text>
+<text x="900" y="554" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">父子进程专用</text>
+<text x="900" y="573" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">固定消息类型</text>
+</g>
+<rect x="827" y="681" width="146" height="28" rx="14" fill="#ece9ff" stroke="none" stroke-width="1.0"/>
+<text x="900" y="700" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#6247c7" text-anchor="middle" letter-spacing="0.05em">STDIO JSONL</text>
+<g data-graph-role="node" data-node-id="agent-runtime">
+<rect x="1170" y="200" width="240" height="130" rx="12" fill="#fff0da" stroke="#d97706" stroke-width="2.4"/>
+<rect x="1175" y="205" width="230" height="120" rx="8" fill="none" stroke="#d97706" stroke-width="0.8"/>
+<text x="1290" y="230" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="720" fill="#182230" text-anchor="middle">AgentSessionRuntime</text>
+<text x="1290" y="254" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">官方生命周期容器</text>
+<text x="1290" y="273" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">AgentSession · SessionManager</text>
+<text x="1290" y="292" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Pi 是唯一执行器</text>
+</g>
+<g data-graph-role="node" data-node-id="resource-loader">
+<rect x="1060" y="400" width="210" height="82" rx="12" fill="#f2efff" stroke="#7257d8" stroke-width="1.4"/>
+<text x="1165" y="430" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Private ResourceLoader</text>
+<text x="1165" y="454" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">私有 agentDir</text>
+<text x="1165" y="473" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">仅显式资源</text>
+</g>
+<g data-graph-role="node" data-node-id="policy-extension">
+<rect x="1310" y="400" width="210" height="82" rx="12" fill="#fff4df" stroke="#d97706" stroke-width="1.4"/>
+<text x="1415" y="430" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Policy Extension</text>
+<text x="1415" y="454" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Tool hook · 审批暂停</text>
+<text x="1415" y="473" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">AbortSignal</text>
+</g>
+<g data-graph-role="node" data-node-id="governed-tools">
+<rect x="1060" y="560" width="210" height="100" rx="12" fill="#e9f8f1" stroke="#18a36b" stroke-width="2.4"/>
+<rect x="1065" y="565" width="200" height="90" rx="8" fill="none" stroke="#18a36b" stroke-width="0.8"/>
+<text x="1165" y="590" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="720" fill="#182230" text-anchor="middle">Governed Tools</text>
+<text x="1165" y="614" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">workspace_list / read / search</text>
+<text x="1165" y="633" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">真实路径复核 · 限额</text>
+</g>
+<g data-graph-role="node" data-node-id="model-runtime">
+<rect x="1310" y="560" width="210" height="100" rx="12" fill="#f2efff" stroke="#7257d8" stroke-width="1.4"/>
+<text x="1415" y="590" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">ModelRuntime</text>
+<text x="1415" y="614" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">CredentialStore adapter</text>
+<text x="1415" y="633" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Provider · Model · Stream</text>
+</g>
+<rect x="1080" y="716" width="145" height="28" rx="14" fill="#ddf7eb" stroke="none" stroke-width="1.0"/>
+<text x="1152" y="735" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#14734d" text-anchor="middle" letter-spacing="0.05em">READ-ONLY V1</text>
+<rect x="1238" y="716" width="122" height="28" rx="14" fill="#fff0d4" stroke="none" stroke-width="1.0"/>
+<text x="1299" y="735" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#a65300" text-anchor="middle" letter-spacing="0.05em">SEQUENTIAL</text>
+<rect x="1374" y="716" width="126" height="28" rx="14" fill="#ece9ff" stroke="none" stroke-width="1.0"/>
+<text x="1437" y="735" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="730" fill="#6247c7" text-anchor="middle" letter-spacing="0.05em">PRIVATE DIR</text>
+<g data-graph-role="node" data-node-id="os-vault">
+<rect x="360" y="865" width="190" height="82" rx="12" fill="#f7f8fa" stroke="#697386" stroke-width="1.4"/>
+<text x="455" y="895" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">OS Credential Vault</text>
+<text x="455" y="919" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">密钥加密保存</text>
+<text x="455" y="938" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">Renderer 不可见</text>
+</g>
+<g data-graph-role="node" data-node-id="workspace-root">
+<rect x="750" y="865" width="220" height="82" rx="12" fill="#e9f8f1" stroke="#18a36b" stroke-width="1.4"/>
+<text x="860" y="895" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Authorized Workspace</text>
+<text x="860" y="919" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">用户选择的真实目录</text>
+<text x="860" y="938" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">工作区外访问拒绝</text>
+</g>
+<g data-graph-role="node" data-node-id="pi-jsonl">
+<rect x="1030" y="865" width="210" height="82" rx="12" fill="#e9f8f1" stroke="#18a36b" stroke-width="1.4"/>
+<text x="1135" y="895" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Pi JSONL Sessions</text>
+<text x="1135" y="919" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">完整消息 · Tool 结果</text>
+<text x="1135" y="938" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">会话树的权威来源</text>
+</g>
+<g data-graph-role="node" data-node-id="model-provider">
+<rect x="1320" y="865" width="190" height="82" rx="12" fill="#f2efff" stroke="#7257d8" stroke-width="1.4"/>
+<text x="1415" y="895" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="720" fill="#182230" text-anchor="middle">Model Provider</text>
+<text x="1415" y="919" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">流式推理</text>
+<text x="1415" y="938" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="450" fill="#697386" text-anchor="middle">凭据不进提示词</text>
+</g>
+<text x="58" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="720" fill="#27303f" text-anchor="start">图例</text>
+<line x1="105" y1="1014" x2="138" y2="1014" stroke="#356ae6" stroke-width="2.1" marker-end="url(#arrow-blue)"/>
+<text x="148" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="500" fill="#526071" text-anchor="start">命令 / IPC</text>
+<line x1="260" y1="1014" x2="293" y2="1014" stroke="#697386" stroke-width="2.1" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="303" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="500" fill="#526071" text-anchor="start">事件 / 快照</text>
+<line x1="430" y1="1014" x2="463" y2="1014" stroke="#18a36b" stroke-width="2.1" marker-end="url(#arrow-green)"/>
+<text x="473" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="500" fill="#526071" text-anchor="start">持久化 / 资源</text>
+<line x1="620" y1="1014" x2="653" y2="1014" stroke="#d97706" stroke-width="2.1" marker-end="url(#arrow-orange)"/>
+<text x="663" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="500" fill="#526071" text-anchor="start">治理 / Tool</text>
+<line x1="790" y1="1014" x2="823" y2="1014" stroke="#7257d8" stroke-width="2.1" marker-end="url(#arrow-purple)"/>
+<text x="833" y="1018" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="11" font-weight="500" fill="#526071" text-anchor="start">资源 / 模型</text>
+<rect x="50" y="1040" width="1500" height="36" rx="12" fill="#f8fafc" stroke="#dfe4eb" stroke-width="1"/>
+<text x="70" y="1063" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="720" fill="#27303f" text-anchor="start">V1 边界</text>
+<text x="140" y="1063" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="520" fill="#526071" text-anchor="start">只读工作区 · 单活动运行 · 单会话写入者 · 无任意 Extension / Shell / write · 崩溃不自动重放</text>
+</svg>

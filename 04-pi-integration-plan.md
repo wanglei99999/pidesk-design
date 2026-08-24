@@ -2,127 +2,150 @@
 
 ## 状态
 
-本文基于 Pi `0.80.10`、提交 `eb8dd587e780b5393f53635002004cb2b5ef8f92` 整理。
+本文基于已安装的 Pi `0.84.2` 和本地 Pi 源码审计整理。审计同时对比了 `v0.84.2` 与当前源码，本文采用的核心接口均存在于已发布的 `0.84.2`，不依赖未发布实现。
 
 已经确认：
 
-- Pi 作为 Agent 运行基础，见 [ADR-0001](adr/0001-use-pi-as-agent-runtime.md)；
-- PiDesk 通过明确边界调用 Pi，不把产品逻辑写入 Pi 内部。
+- Pi 是 DeskBuddy 唯一的 Agent 执行基础，见 [ADR-0001](adr/0001-use-pi-as-agent-runtime.md)；
+- Pi SDK 运行在独立 Runner 子进程内；
+- Electron Control Plane 通过 Pi 官方 JSONL RPC 协议控制 Runner；
+- DeskBuddy 维护薄的可靠传输适配层，不把现有 `RpcClient` 直接作为产品边界；
+- Pi JSONL 保存会话和消息树，DeskBuddy SQLite 保存产品元数据；
+- 具体边界见 [ADR-0003](adr/0003-isolate-pi-in-runner.md) 和[架构设计规范](docs/superpowers/specs/2026-08-24-deskbuddy-pi-runner-architecture-design.md)。
 
-尚未确认：
+ADR-0003 在书面规范通过审阅前保持“提议”状态。
 
-- 第一版使用 coding-agent SDK、RPC 还是 agent-core；
-- 适配边界的具体接口；
-- 任务、会话和产物由哪一层保存。
-
-这些问题由 TASK-001 的最小代码验证，不在本文提前定案。
-
-## Pi 当前能力
+## Pi 负责什么
 
 ### `@earendil-works/pi-ai`
 
-- 统一的多模型接口；
-- Provider 和模型配置；
-- 凭据解析和 OAuth；
-- 流式响应和消息转换。
+- 模型、Provider 和流式响应；
+- 凭据接口和 OAuth 能力；
+- 消息转换和用量信息。
 
 ### `@earendil-works/pi-agent-core`
 
-- Agent 状态和 Agent Loop；
+- Agent Loop 和 Agent 状态；
 - Tool 调用；
-- 事件流；
+- 运行事件；
 - 中断、继续、steering 和 follow-up；
-- 自定义消息、上下文转换和宿主接口。
-
-它负责一次 Agent 请求如何运行，不等同于 PiDesk 的完整任务系统。
+- 顺序或并行 Tool 执行策略。
 
 ### `@earendil-works/pi-coding-agent`
 
-- `AgentSession` 和 SessionManager；
-- 内置及自定义 Tool；
-- Skill、Extension 和资源加载；
-- 工作目录和会话存储；
-- SDK 和 RPC 接入；
-- 交互、Print/JSON、RPC 和 SDK 四类运行方式。
+- `AgentSession`、`AgentSessionRuntime` 和 `SessionManager`；
+- Tool、Skill、Extension 和资源加载；
+- SDK 和 JSONL RPC 模式；
+- 会话切换、分支、压缩和恢复。
 
-它面向编程任务，但会话、文件工具、扩展机制和嵌入接口可能适合第一批办公场景。
+DeskBuddy 优先使用这些公开接口，不复制 Pi 已经提供的 Agent 生命周期和会话机制。
 
-### `@earendil-works/pi-tui`
+## DeskBuddy 负责什么
 
-终端界面库。第一版可以借助 CLI 快速验证完整流程，但是否作为长期产品界面尚未决定。
+- 工作区、任务和运行记录；
+- Electron 窗口、React 界面和安全 IPC；
+- Runner 进程生命周期和独占执行；
+- 工作区路径边界；
+- Tool 白名单、操作审批和审计；
+- 流式事件投影和权威快照；
+- 产物索引；
+- 凭据保管边界；
+- 崩溃、取消和重新打开后的产品状态。
 
-### `@earendil-works/pi-orchestrator`
+## 选定接入方式
 
-包描述明确标记为实验性。第一阶段不依赖，只有单 Agent 场景稳定后才重新评估。
+### SDK 位于 Runner 内
 
-## PiDesk 需要补充
+Runner 使用 `createAgentSessionServices`、`createAgentSessionRuntime` 和 `runRpcMode` 组合 Pi 官方能力。SDK 提供类型和生命周期控制，但不会进入 Renderer，也不直接运行在 Electron 主进程。
 
-Pi 官方明确不内置 MCP、sub-agent、Plan Mode、权限弹窗和后台 Bash。PiDesk 还需要根据场景逐步补充：
+这样既保留 SDK 的完整能力，又把模型、Tool 和 Extension 执行放进可独立终止的进程。
 
-- 产品级权限和操作确认；
-- 任务状态和执行记录；
-- 办公文件解析、生成和预览；
-- 产物管理；
-- 连接器和凭据边界；
-- 定时任务和远程入口；
-- 面向办公用户的产品界面。
+### 官方 RPC 作为进程协议
 
-这些不是第一版同时完成的功能。
+Electron Control Plane 与 Runner 使用 Pi 官方 JSONL 命令和事件。DeskBuddy 的 `PiRpcTransport` 负责：
 
-## 候选接入方式
+- 用 `get_state` 完成启动握手；
+- 为不同命令设置独立期限并支持取消；
+- 发送 Extension UI 响应；
+- 校验 JSONL 帧和协议类型；
+- 隔离事件监听器错误；
+- 收集结构化 stderr 和退出原因。
 
-### 候选 A：coding-agent SDK
+它不增加第二套 Agent 协议，只补齐桌面产品需要的可靠性。
 
-适合 Node.js/TypeScript 同进程集成，可以直接使用类型和 `AgentSession`。它是 TASK-001 的首选验证对象，但尚未成为正式架构决定。
+### 一个活动运行对应一个 Runner
 
-需要验证：
+V1 全局只允许一个活动 `AgentRun`。每次执行启动一个临时 Runner，加载所属 `Task` 的 Pi 会话；运行结束并完成持久化后，Runner 可以退出。
 
-- 编程任务的默认假设是否容易替换；
-- 内置会话和资源加载是否适合办公任务；
-- 自定义 Tool 的权限边界是否清楚；
-- 取消、事件和确认流程是否能被产品层控制。
+重新打开已有 Task 时，也可以短暂启动 Runner，通过官方 `get_entries` 读取 Pi JSONL 并生成产品快照；Control Plane 不直接解析 Pi 会话文件。
 
-### 候选 B：RPC
+同一 Pi 会话文件不能被两个进程同时写入。`RunCoordinator` 负责产品执行所有权，`SessionLeaseService` 用跨进程租约防止残留 Runner 或第二个应用实例同时写入。
 
-适合进程隔离、非 Node.js 主程序、跨容器或独立升级。代价是需要维护 JSONL 协议、进程生命周期和类型映射。
+## 会话和产品数据
 
-### 候选 C：agent-core + pi-ai
+Pi JSONL 保存：
 
-适合完全自定义任务、消息、会话和资源加载。它的控制力最高，但需要自己补充 coding-agent 已经提供的较多能力。
+- 完整消息和 Tool 结果；
+- 会话树和分支；
+- 模型与 thinking 变化；
+- 压缩记录。
 
-## 候选边界
+DeskBuddy SQLite 保存：
 
-TASK-001 可以先用一个很薄的适配层隔离 Pi。名称和接口尚未确认，候选职责包括：
+- `Workspace`：授权目录和可用状态；
+- `Task`：用户目标、模式和 Pi 会话指针；
+- `AgentRun`：一次执行的指令、状态、时间和错误；
+- `Approval`：待确认动作和决定；
+- `Artifact`：工作成果索引。
 
-- 创建 Agent 或会话；
-- 发送输入和取消任务；
-- 订阅事件；
-- 注册 Tool；
-- 读取最终结果和使用信息。
+SQLite 不复制完整聊天记录。Pi 会话文件位于 Electron `userData` 下的应用私有目录，不写入用户代码仓库。
 
-在验证前不实现完整的任务服务、Skill 管理、连接器管理和后台调度。
+## Extension 和 Tool
 
-## TASK-001 验证清单
+V1 使用私有 `agentDir` 和显式资源加载配置：
 
-1. 用 SDK 运行一个只有只读 Tool 的最小任务；
-2. 记录初始化、输入、Tool 调用和结束事件；
-3. 验证取消信号；
-4. 确认工作目录如何传递和限制；
-5. 检查编程默认提示词、Tool 和资源加载能否替换；
-6. 用最小 RPC 示例对比进程边界和开发成本；
-7. 记录继续使用 SDK、改用 RPC 或下沉 agent-core 的理由；
-8. 创建新的 ADR 固化最终选择。
+- 不自动加载用户全局 Pi Extension、Skill、Prompt Template 和 Theme；
+- 只加载 DeskBuddy 注册的 Extension factory；
+- 只开放明确批准的 Tool；
+- 首个切片只提供 `workspace_read`、`workspace_list` 和 `workspace_search`；
+- 不开放 Pi 内置 `bash`、`edit` 和 `write`。
 
-## 需要后续验证
+Pi Extension 用于运行时策略、Tool hook 和审批暂停。产品状态、路径授权和审批记录仍由 DeskBuddy 管理。
 
-- Session 存储由 PiDesk 还是 coding-agent 管理；
-- Extension 是否适合作为连接器；
-- Skill 如何版本化和按需加载；
-- Office 文件工具怎样接入 Tool 体系；
-- 用户确认怎样暂停并恢复 Agent；
-- 重复执行怎样避免重复写入；
-- Pi 升级时适配边界能否隔离变化。
+## 事件边界
 
-## 资料
+Renderer 不消费 Pi 原始事件。`PiEventProjector` 把事件转换为：
 
-固定版本资料见 [sources.md](sources.md)。源码学习只在当前任务需要时按路径读取，不在每次开发开始时加载全部 Pi 文档。
+- `RunProgress`：只用于当前流式显示；
+- `RunSnapshot`：带 `revision` 的权威任务快照。
+
+Electron 为所有事件附加 `taskId` 和 `agentRunId`。重新连接或重新打开页面时以快照为准，不尝试只靠增量事件还原状态。
+
+## V1 实施顺序
+
+1. 建立 Electron、Preload 和严格 IPC 边界；
+2. 持久化工作区，并处理目录缺失和重新关联；
+3. 建立最小 `Workspace`、`Task`、`AgentRun` 数据模型；
+4. 实现 Runner supervisor 和 `PiRpcTransport`；
+5. 接入私有 Pi 资源加载和只读工作区 Tool；
+6. 投影运行进度和权威快照；
+7. 验证取消、Runner 崩溃和应用重启恢复。
+
+以下内容不进入 V1：任意第三方 Extension、Shell 和写文件、多任务并行、后台自动化、多 Agent、远程运行，以及 Pi 实验性 client/server。
+
+## 验证要求
+
+- 使用 faux provider，不调用真实付费模型；
+- 路径边界覆盖绝对路径、`..`、符号链接和 Windows reparse point；
+- RPC 覆盖启动失败、非法帧、命令超时、取消和进程退出；
+- 会话覆盖首次响应前崩溃、已有 JSONL 恢复和重复打开；
+- Renderer 测试只依赖 DeskBuddy IPC DTO，不导入 Pi 类型；
+- 每次代码变更运行 `npm run check`，修改测试时运行对应专项测试。
+
+## 重新评估条件
+
+- Pi 官方提供稳定的 coding-agent 服务进程或更完整的 RPC 客户端；
+- 一个活动运行的限制阻碍经过验证的用户场景；
+- 只读 Tool 无法验证首个真实工作区闭环；
+- Pi 公共接口发生破坏性变化；
+- 产品需要跨设备或远程执行。

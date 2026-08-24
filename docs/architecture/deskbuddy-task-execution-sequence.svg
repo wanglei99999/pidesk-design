@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1920" viewBox="0 0 1600 1920" role="img" aria-labelledby="title desc">
+<title id="title">DeskBuddy V1 任务执行与恢复时序</title>
+<desc id="desc">工作区恢复、临时 Runner 快照读取、AgentRun 启动、只读工具、取消和崩溃恢复时序。</desc>
+<defs>
+  <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#356ae6"/></marker>
+  <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#18a36b"/></marker>
+  <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/></marker>
+  <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7257d8"/></marker>
+  <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#697386"/></marker>
+</defs>
+<rect x="0" y="0" width="1600" height="1920" rx="0" fill="#f7f8fb" stroke="none" stroke-width="1"/>
+<rect x="34" y="28" width="1532" height="1864" rx="24" fill="#ffffff" stroke="#e4e7ec" stroke-width="1"/>
+<text x="72" y="78" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="750" fill="#111827" text-anchor="start">DeskBuddy V1 · Pi Runner 执行与恢复时序</text>
+<text x="72" y="108" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="400" fill="#697386" text-anchor="start">产品元数据先落 SQLite；会话由 Pi JSONL 保存；崩溃后不自动重放。</text>
+<rect x="1345" y="57" width="155" height="30" rx="15" fill="#fff0da" stroke="none" stroke-width="1"/>
+<text x="1422" y="77" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#a65300" text-anchor="middle">PI 0.84.2 · V1</text>
+<rect x="30" y="134" width="150" height="52" rx="13" fill="#eef4ff" stroke="#356ae6" stroke-width="1"/>
+<text x="105" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">用户 / React</text>
+<line x1="105" y1="186" x2="105" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="230" y="134" width="150" height="52" rx="13" fill="#eef4ff" stroke="#356ae6" stroke-width="1"/>
+<text x="305" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">Electron Control</text>
+<line x1="305" y1="186" x2="305" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="430" y="134" width="150" height="52" rx="13" fill="#eaf9f2" stroke="#16865a" stroke-width="1"/>
+<text x="505" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">SQLite</text>
+<line x1="505" y1="186" x2="505" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="630" y="134" width="150" height="52" rx="13" fill="#eef4ff" stroke="#356ae6" stroke-width="1"/>
+<text x="705" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">RunCoord / Lease</text>
+<line x1="705" y1="186" x2="705" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="830" y="134" width="150" height="52" rx="13" fill="#f2efff" stroke="#7257d8" stroke-width="1"/>
+<text x="905" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">PiRpcTransport</text>
+<line x1="905" y1="186" x2="905" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="1030" y="134" width="150" height="52" rx="13" fill="#fff6e7" stroke="#b86400" stroke-width="1"/>
+<text x="1105" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">Pi Runner</text>
+<line x1="1105" y1="186" x2="1105" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="1230" y="134" width="150" height="52" rx="13" fill="#eaf9f2" stroke="#16865a" stroke-width="1"/>
+<text x="1305" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">Pi JSONL</text>
+<line x1="1305" y1="186" x2="1305" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="1410" y="134" width="150" height="52" rx="13" fill="#eaf9f2" stroke="#16865a" stroke-width="1"/>
+<text x="1485" y="166" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="650" fill="#27303f" text-anchor="middle">Workspace</text>
+<line x1="1485" y1="186" x2="1485" y2="1770" stroke="#cfd5df" stroke-width="1" stroke-dasharray="5 7"/>
+<rect x="58" y="205" width="1484" height="390" rx="16" fill="#f7faff" stroke="#dce7fb" stroke-width="1"/>
+<rect x="76" y="219" width="112" height="30" rx="15" fill="#e7efff" stroke="none" stroke-width="1"/>
+<text x="132" y="239" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#2859c5" text-anchor="middle">01 重新打开</text>
+<text x="202" y="239" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="500" fill="#526071" text-anchor="start">恢复产品元数据；需要消息时由临时 Runner 读取 Pi JSONL</text>
+<line x1="105" y1="278" x2="305" y2="278" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="205" y="270" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">打开 Workspace / Task</text>
+<line x1="305" y1="320" x2="1485" y2="320" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="895" y="312" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">验证目录存在、权限和真实路径</text>
+<line x1="305" y1="362" x2="505" y2="362" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="405" y="354" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">读取 Workspace、Task、Run 元数据</text>
+<line x1="305" y1="404" x2="705" y2="404" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="505" y="396" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">请求会话快照</text>
+<line x1="705" y1="446" x2="905" y2="446" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="805" y="438" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">取得会话租约并启动临时 Runner</text>
+<line x1="905" y1="488" x2="1105" y2="488" stroke="#7257d8" stroke-width="2" marker-end="url(#arrow-purple)"/>
+<text x="1005" y="480" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#7257d8" text-anchor="middle">get_entries</text>
+<line x1="1105" y1="530" x2="1305" y2="530" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="1205" y="522" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">读取权威会话树</text>
+<line x1="1105" y1="562" x2="905" y2="562" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="1005" y="555" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">entries + leafId</text>
+<line x1="905" y1="584" x2="305" y2="584" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="605" y="577" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">Projector 重建 RunSnapshot</text>
+<rect x="58" y="615" width="1484" height="500" rx="16" fill="#fafbff" stroke="#e2e6ef" stroke-width="1"/>
+<rect x="76" y="629" width="112" height="30" rx="15" fill="#ece9ff" stroke="none" stroke-width="1"/>
+<text x="132" y="649" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#6247c7" text-anchor="middle">02 启动运行</text>
+<text x="202" y="649" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="500" fill="#526071" text-anchor="start">先创建 AgentRun，再启动或复用 Runner；get_state 成功后才发送 prompt</text>
+<line x1="105" y1="692" x2="305" y2="692" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="205" y="684" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">run.start(taskId, instruction)</text>
+<line x1="305" y1="734" x2="505" y2="734" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="405" y="726" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">创建 AgentRun(starting) + 原始指令</text>
+<line x1="305" y1="776" x2="705" y2="776" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="505" y="768" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">申请独占执行所有权</text>
+<line x1="705" y1="818" x2="905" y2="818" stroke="#356ae6" stroke-width="2" marker-end="url(#arrow-blue)"/>
+<text x="805" y="810" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#356ae6" text-anchor="middle">spawn / attach + session pointer</text>
+<line x1="905" y1="860" x2="1105" y2="860" stroke="#7257d8" stroke-width="2" marker-end="url(#arrow-purple)"/>
+<text x="1005" y="852" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#7257d8" text-anchor="middle">get_state 握手</text>
+<line x1="1105" y1="902" x2="905" y2="902" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="1005" y="894" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">sessionId / sessionFile / ready</text>
+<line x1="905" y1="944" x2="305" y2="944" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="605" y="936" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">Runner ready</text>
+<line x1="305" y1="986" x2="505" y2="986" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="405" y="978" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">保存 session 指针 + running</text>
+<line x1="905" y1="1028" x2="1105" y2="1028" stroke="#7257d8" stroke-width="2" marker-end="url(#arrow-purple)"/>
+<text x="1005" y="1020" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#7257d8" text-anchor="middle">prompt</text>
+<line x1="1105" y1="1070" x2="1305" y2="1070" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="1205" y="1062" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">追加 Pi 会话记录</text>
+<rect x="58" y="1135" width="1484" height="330" rx="16" fill="#f6fcf9" stroke="#cdeadd" stroke-width="1"/>
+<rect x="76" y="1149" width="138" height="30" rx="15" fill="#ddf7eb" stroke="none" stroke-width="1"/>
+<text x="145" y="1169" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#14734d" text-anchor="middle">03 流式与工具</text>
+<text x="228" y="1169" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="500" fill="#526071" text-anchor="start">原始 Pi 事件只在 Control Plane 投影；V1 工具只读且每次执行真实路径复核</text>
+<line x1="1105" y1="1210" x2="905" y2="1210" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="1005" y="1202" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">Pi events</text>
+<line x1="905" y1="1252" x2="305" y2="1252" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="605" y="1244" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">RunProgress / RunSnapshot</text>
+<line x1="305" y1="1294" x2="105" y2="1294" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="205" y="1286" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">流式显示产品 DTO</text>
+<line x1="1105" y1="1336" x2="1485" y2="1336" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="1295" y="1328" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">workspace_list / read / search</text>
+<line x1="1485" y1="1378" x2="1105" y2="1378" stroke="#18a36b" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-green)"/>
+<text x="1295" y="1370" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">结构化 ToolResult</text>
+<line x1="1105" y1="1420" x2="905" y2="1420" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="1005" y="1412" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">agent_end</text>
+<line x1="305" y1="1452" x2="505" y2="1452" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="405" y="1445" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">终态 + revision + leafId</text>
+<rect x="58" y="1485" width="1484" height="285" rx="16" fill="#fffcf6" stroke="#f2dfbd" stroke-width="1"/>
+<rect x="76" y="1499" width="142" height="30" rx="15" fill="#fff0d4" stroke="none" stroke-width="1"/>
+<text x="147" y="1519" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#a65300" text-anchor="middle">04 取消与崩溃</text>
+<text x="232" y="1519" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="500" fill="#526071" text-anchor="start">取消先走 abort；进程失联直接 interrupted；任何路径都不自动重放指令</text>
+<line x1="105" y1="1560" x2="305" y2="1560" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-orange)"/>
+<text x="205" y="1552" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#d97706" text-anchor="middle">取消运行</text>
+<line x1="305" y1="1602" x2="905" y2="1602" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-orange)"/>
+<text x="605" y="1594" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#d97706" text-anchor="middle">abort</text>
+<line x1="905" y1="1644" x2="1105" y2="1644" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-orange)"/>
+<text x="1005" y="1636" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#d97706" text-anchor="middle">AbortSignal</text>
+<line x1="1105" y1="1686" x2="705" y2="1686" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="905" y="1678" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">agent_end 或 process exit</text>
+<line x1="705" y1="1728" x2="505" y2="1728" stroke="#18a36b" stroke-width="2" marker-end="url(#arrow-green)"/>
+<text x="605" y="1720" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#18a36b" text-anchor="middle">cancelled / failed / interrupted</text>
+<line x1="705" y1="1758" x2="305" y2="1758" stroke="#697386" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow-gray)"/>
+<text x="505" y="1751" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="550" fill="#697386" text-anchor="middle">释放 SessionLease</text>
+<rect x="58" y="1790" width="1484" height="82" rx="16" fill="#f8fafc" stroke="#dfe4eb" stroke-width="1"/>
+<text x="78" y="1818" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="700" fill="#27303f" text-anchor="start">AgentRun</text>
+<rect x="165" y="1801" width="96" height="38" rx="19" fill="#eef4ff" stroke="#b9cdf7" stroke-width="1"/>
+<text x="213" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#2859c5" text-anchor="middle">starting</text>
+<text x="275" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#98a2b3" text-anchor="start">→</text>
+<rect x="305" y="1801" width="92" height="38" rx="19" fill="#f2efff" stroke="#cfc5f5" stroke-width="1"/>
+<text x="351" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#6247c7" text-anchor="middle">running</text>
+<text x="411" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#98a2b3" text-anchor="start">↔</text>
+<rect x="445" y="1801" width="150" height="38" rx="19" fill="#fff4df" stroke="#f2ce8e" stroke-width="1"/>
+<text x="520" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#a65300" text-anchor="middle">awaiting_approval</text>
+<text x="609" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#98a2b3" text-anchor="start">→</text>
+<rect x="639" y="1801" width="112" height="38" rx="19" fill="#fff4df" stroke="#f2ce8e" stroke-width="1"/>
+<text x="695" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#a65300" text-anchor="middle">cancelling</text>
+<text x="765" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="20" font-weight="500" fill="#98a2b3" text-anchor="start">→</text>
+<rect x="795" y="1801" width="330" height="38" rx="19" fill="#e9f8f1" stroke="#b9e4d1" stroke-width="1"/>
+<text x="960" y="1826" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="650" fill="#14734d" text-anchor="middle">completed / failed / cancelled / interrupted</text>
+<text x="1150" y="1818" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="13" font-weight="700" fill="#27303f" text-anchor="start">不变量</text>
+<text x="1210" y="1818" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="500" fill="#526071" text-anchor="start">一个活动运行 · 一个会话写入者</text>
+<text x="1210" y="1842" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-size="12" font-weight="500" fill="#526071" text-anchor="start">Renderer 无系统权限 · V1 无写入工具</text>
+</svg>

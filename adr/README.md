@@ -49,3 +49,4 @@ ADR 用于记录会影响多个场景、修改成本较高或涉及安全边界�
 |---|---|---|---|
 | [0001](0001-use-pi-as-agent-runtime.md) | 使用 Pi 作为 Agent 运行基础 | 已采纳 | 2026-07-30 |
 | [0002](0002-separate-public-core-and-private-adapters.md) | 分离公开产品与私有适配 | 已采纳 | 2026-07-30 |
+| [0003](0003-isolate-pi-in-runner.md) | 在独立 Runner 中运行 Pi | 提议 | 2026-08-24 |
